@@ -330,3 +330,5 @@ If you ever set or change modules or Terraform Settings, run "terraform init"
 again to reinitialize your working directory.
 gitpod /workspace/terraform-beginner-bootcamp-2023 (main) $
 ```
+
+We have automated the above login process using the following bash script [bin/create_tfrc_credentials.sh](./bin/create_tfrc_credentials.sh)
