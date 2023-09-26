@@ -222,3 +222,111 @@ This file **should not be committed** to teh VCS eg Github. This file can contai
 
 `.terraform` directory contains binaries of terraform providers.
 
+## Issues with Terraform Cloud Login and Gitpod WorkSpace
+
+When attempting to run `terraform login` it will launch a bash wiswig view to generate a token. However it does not work as expected in Gitpod VSCode in the browser. 
+
+The workaround is as follows
+- Go to the link mentioned below and generate a token 
+
+```sh
+https://app.terraform.io/app/settings/tokens?source=terraform-login
+```
+
+- In the bash wiswig view exit out using 'q' key to quit and then confirm the response by saying 'y'.
+- The prompt now displays as below
+
+```sh
+Generate a token using your browser, and copy-paste it into this prompt.
+
+Terraform will store the token in plain text in the following file
+for use by subsequent commands:
+    /home/gitpod/.terraform.d/credentials.tfrc.json
+
+Token for app.terraform.io:
+  Enter a value: 
+
+```
+
+- At this prompt, select the token from the above link and paste it here. **NOTE** The prompt will not move. Since this is a security token, the OS will paste the token but the prompt will stay there. Best way is to first click on the cursor with mouse to activate the field and then use keys `shift + insert` or `Ctrl + V` to paste the value. Wait 2 seconds to ensure the complete string is pasted and then press `enter` key once.
+
+- Below screen will display after a few seconds if the code was successfully entered. 
+
+```sh
+Retrieved token for user <USERNAME>
+
+
+---------------------------------------------------------------------------------
+
+                                          -                                
+                                          -----                           -
+                                          ---------                      --
+                                          ---------  -                -----
+                                           ---------  ------        -------
+                                             -------  ---------  ----------
+                                                ----  ---------- ----------
+                                                  --  ---------- ----------
+   Welcome to Terraform Cloud!                     -  ---------- -------
+                                                      ---  ----- ---
+   Documentation: terraform.io/docs/cloud             --------   -
+                                                      ----------
+                                                      ----------
+                                                       ---------
+                                                           -----
+                                                               -
+
+
+   New to TFC? Follow these steps to instantly apply an example configuration:
+
+   $ git clone https://github.com/hashicorp/tfc-getting-started.git
+   $ cd tfc-getting-started
+   $ scripts/setup.sh
+
+
+gitpod /workspace/terraform-beginner-bootcamp-2023 (main) $
+```
+
+- Now the commands `terraform init` and `terraform apply` should be used to update the status. 
+
+### Terraform State Copy
+
+The first time `terraform init` command is run post successfully login into terraform cloud via `terraform login`, a message comes up informing the user that terraform can optionally copy the current workspace state to the configured terraform cloud workspace and requests user confirmation through `yes` or `no`.
+
+If you say yes the state file is copied otherwise it is left as is. 
+
+> Sample Output Generated for first time terraform init command run post terraform login 
+
+```sh
+gitpod /workspace/terraform-beginner-bootcamp-2023 (main) $ terraform init
+
+Initializing Terraform Cloud...
+Do you wish to proceed?
+  As part of migrating to Terraform Cloud, Terraform can optionally copy your
+  current workspace state to the configured Terraform Cloud workspace.
+  
+  Answer "yes" to copy the latest state snapshot to the configured
+  Terraform Cloud workspace.
+  
+  Answer "no" to ignore the existing state and just activate the configured
+  Terraform Cloud workspace with its existing state, if any.
+  
+  Should Terraform migrate your existing state?
+
+  Enter a value: yes
+
+
+Initializing provider plugins...
+- Reusing previous version of hashicorp/random from the dependency lock file
+- Reusing previous version of hashicorp/aws from the dependency lock file
+- Using previously-installed hashicorp/random v3.5.1
+- Using previously-installed hashicorp/aws v5.17.0
+
+Terraform Cloud has been successfully initialized!
+
+You may now begin working with Terraform Cloud. Try running "terraform plan" to
+see any changes that are required for your infrastructure.
+
+If you ever set or change modules or Terraform Settings, run "terraform init"
+again to reinitialize your working directory.
+gitpod /workspace/terraform-beginner-bootcamp-2023 (main) $
+```

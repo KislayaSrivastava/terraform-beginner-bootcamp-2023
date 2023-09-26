@@ -1,4 +1,10 @@
 terraform {
+  cloud {
+    organization = "KS-Food-Vendor-Organization"
+    workspaces {
+      name = "terra-house-FoodCart"
+    }
+  }
   required_providers {
     random = {
       source = "hashicorp/random"
