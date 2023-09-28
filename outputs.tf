@@ -1,7 +1,4 @@
-output "Ramdom_variable_user_id" {
-    value = var.user_uuid
-}
-
-output "bucket_name"{
-    value=aws_s3_bucket.website_bucket.bucket
+output "bucket_name" {
+    description = "Bucket Name for our static website"
+    value = module.terrahouse_aws.bucket_name
 }
