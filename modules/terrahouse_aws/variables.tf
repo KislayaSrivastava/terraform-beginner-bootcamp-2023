@@ -17,3 +17,24 @@ variable "bucket_name" {
     error_message = "Bucket name must be lowercase, between 3 and 63 characters, and may only contain lowercase letters, numbers, hyphens, and periods."
   }
 }
+
+#Commented for now
+# variable "index_html_filepath" {
+#   description = "Path to the index.html file"
+#   type        = string
+
+#   validation {
+#     condition = fileexists(var.index_html_filepath)
+#     error_message = "The provided index_html_filepath does not point to a valid file."
+#   }
+# }
+
+# variable "error_html_filepath" {
+#   description = "Path to the error.html file"
+#   type        = string
+
+#   validation {
+#     #condition = fileexists(var.error_html_filepath)
+#     error_message = "The provided error_html_filepath does not point to a valid file."
+#   }
+# }
