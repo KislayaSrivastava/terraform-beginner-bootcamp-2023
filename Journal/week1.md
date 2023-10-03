@@ -165,3 +165,71 @@ resource "aws_s3_object" "Index_File_object" {
 }
 ```
 
+## Terraform Locals 
+
+Terraform locals allow us to define local variables.
+It can be very useful when we need to transform data into another format and have it referenced as a variable.
+
+```tf
+locals {
+    s3_origin_id = "MyS3Origin"
+}
+```
+
+[Local Values](https://developer.hashicorp.com/terraform/language/values/locals)
+
+## Terraform Data Sources
+This allows us to use source data from cloud resources.
+
+This is useful when we want to reference cloud resources without importing them. 
+
+```tf
+data "aws_caller_identity" "current" {}
+
+output "account_id" {
+  value = data.aws_caller_identity.current.account_id
+}
+
+output "caller_arn" {
+  value = data.aws_caller_identity.current.arn
+}
+
+output "caller_user" {
+  value = data.aws_caller_identity.current.user_id
+}
+```
+
+[Data Sources](https://developer.hashicorp.com/terraform/language/data-sources)
+
+### Errors while creating CloudFront Distribution
+
+I received an error while creating the distribution. 
+
+```tf
+│ Error: creating CloudFront Distribution: AccessDenied: Your account must be verified before you can add new CloudFront resources. To verify your account, please contact AWS Support (https://console.aws.amazon.com/support/home#/) and include this error message.
+│       status code: 403, request id: 6868a0d5-0cca-42f0-a28c-d91fe856a03a
+│ 
+│   with module.terrahouse_aws.aws_cloudfront_distribution.s3_distribution,
+│   on modules/terrahouse_aws/resource-cdn.tf line 17, in resource "aws_cloudfront_distribution" "s3_distribution":
+│   17: resource "aws_cloudfront_distribution" "s3_distribution" {
+│ 
+╵
+Operation failed: failed running terraform apply (exit 1)
+```
+
+[CloudFront Limit Increase](https://repost.aws/questions/QULXHEAzC7Sai6_LTLNYn83Q/your-account-must-be-verified-before-you-can-add-new-cloudfront-resources)
+
+The above link helped. I have raised a ticket. I am waiting for the team to revert. 
+
+Update:: Got the account validated. Able to create a cloudfront distribution.
+
+## Working with JSON
+
+We use the jsonencode to create the json policy inline in the hcl .
+
+```tf
+> jsonencode({"hello"="world"})
+{"hello":"world"}
+```
+
+[jsonencode](https://developer.hashicorp.com/terraform/language/functions/jsonencode)
