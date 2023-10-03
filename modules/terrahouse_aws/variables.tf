@@ -44,7 +44,7 @@ variable "content_version" {
   type        = number
   default     = 1
   validation {
-    condition     = var.content_version >= 1 && can(var.content_version, "int")
+    condition     = var.content_version >= 1 && floor(var.content_version) == var.content_version
     error_message = "Content version must be a positive integer starting at 1."
   }
 }
