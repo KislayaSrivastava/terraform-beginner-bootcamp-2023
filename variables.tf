@@ -14,3 +14,7 @@ variable "bucket_name" {
 # variable "error_html_filepath" {
 #   type = string
 # }
+
+variable "content_version" {
+  type        = number
+}

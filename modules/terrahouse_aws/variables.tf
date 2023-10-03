@@ -38,3 +38,13 @@ variable "bucket_name" {
 #     error_message = "The provided error_html_filepath does not point to a valid file."
 #   }
 # }
+
+variable "content_version" {
+  description = "The content version (positive integer starting at 1)"
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.content_version >= 1 && can(var.content_version, "int")
+    error_message = "Content version must be a positive integer starting at 1."
+  }
+}
