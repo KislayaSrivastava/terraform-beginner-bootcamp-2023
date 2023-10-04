@@ -18,26 +18,26 @@ variable "bucket_name" {
   }
 }
 
-#Commented for now
-# variable "index_html_filepath" {
-#   description = "Path to the index.html file"
-#   type        = string
 
-#   validation {
-#     condition = fileexists(var.index_html_filepath)
-#     error_message = "The provided index_html_filepath does not point to a valid file."
-#   }
-# }
+variable "index_html_filepath" {
+  description = "Path to the index.html file"
+  type        = string
 
-# variable "error_html_filepath" {
-#   description = "Path to the error.html file"
-#   type        = string
+  validation {
+    condition = fileexists(var.index_html_filepath)
+    error_message = "The provided index_html_filepath does not point to a valid file."
+  }
+}
 
-#   validation {
-#     #condition = fileexists(var.error_html_filepath)
-#     error_message = "The provided error_html_filepath does not point to a valid file."
-#   }
-# }
+variable "error_html_filepath" {
+  description = "Path to the error.html file"
+  type        = string
+
+  validation {
+    condition = fileexists(var.error_html_filepath)
+    error_message = "The provided error_html_filepath does not point to a valid file."
+  }
+}
 
 variable "content_version" {
   description = "The content version (positive integer starting at 1)"
@@ -47,4 +47,9 @@ variable "content_version" {
     condition     = var.content_version >= 1 && floor(var.content_version) == var.content_version
     error_message = "Content version must be a positive integer starting at 1."
   }
+}
+
+variable "assets_path" {
+  description = "path to assets folder"
+  type = string
 }
