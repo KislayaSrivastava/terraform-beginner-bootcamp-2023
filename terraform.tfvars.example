@@ -1,0 +1,11 @@
+terratowns_endpoint="https://terratowns.cloud/api"
+foodtruck = {
+  public_path = "/workspace/terraform-beginner-bootcamp-2023/public/FoodTruck"
+  content_version = 1
+  bucket_name = "" 
+}
+movies = {
+  public_path = "/workspace/terraform-beginner-bootcamp-2023/public/Movies"
+  content_version = 1
+  bucket_name="" 
+}

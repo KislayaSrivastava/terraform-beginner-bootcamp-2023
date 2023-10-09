@@ -11,22 +11,19 @@ variable "terratowns_access_token" {
 }
 
 variable "bucket_name" {
-  type = string
-}
-
-variable "index_html_filepath" {
    type = string
 }
 
-variable "error_html_filepath" {
-   type = string
+variable "foodtruck" {
+  type = object({
+    public_path = string
+    content_version = number
+  })
 }
 
-variable "content_version" {
-  type        = number
-}
-
-variable "assets_path" {
-  description = "path to assets folder"
-  type = string
+variable "movies" {
+  type = object({
+    public_path = string
+    content_version = number
+  })
 }

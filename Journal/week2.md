@@ -295,3 +295,126 @@ So the custom terraform provider was successfully tested.
 Terraform provider resources utilizes CRUD. It stands for Create/Read/Update/Delete.
 
 [CRUD Primer](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
+
+A main.go file was created in golang. I coded alongside Andrew and was able to successfully implement the CRUD operations on the demo server `sinatra`. 
+
+## Getting Access Code for Terratowns and Deploying Code to Terratown
+
+Next step was to use an access token generated on the exampro website to create an account on `terratowns.cloud` website. This was successfully completed by me. 
+
+Steps in Deploying Code
+
+1- The `main.tf` file was modified to point to the correct endpoint. Then the `user_uuid` value and the `access_token` values were initially hardcoded to test that the record is getting successfully inserted. 
+2- A resource named `food-truck` was created with the key attributes as per the custom provider attributes.
+
+Sample Code fix
+```tf
+provider "terratowns" {
+  endpoint = var.terratowns_endpoint
+  user_uuid=var.teacherseat_user_uuid
+  token=var.terratowns_access_token
+}
+
+module "terrahome_foodtruck_hosting" {
+  source = "./modules/terrahome_aws"
+  user_uuid = var.teacherseat_user_uuid
+  bucket_name = var.bucket_name
+  public_path = var.foodtruck.public_path
+  content_version = var.foodtruck.content_version
+}
+
+resource "terratowns_home" "food-truck" {
+  name = "My Food Truck 'let's eat' is here to stay forver"
+  description =<<DESCRIPTION
+Welcome to 'Let's Eat'! 🌟
+We're thrilled to introduce our mouthwatering world of flavors on wheels to Bangalore. At Let's Eat, we're not just serving food; we're crafting unforgettable culinary experiences, one plate at a time.
+Our Menu: Explore a delectable lineup of Lucknawi delights, from classic favorites to innovative creations. Our ingredients are fresh, our recipes are handcrafted, and our passion for food is unparalleled.
+Our Chefs: Meet the talented culinary artists behind the magic - Kislaya & Shruti. With years of experience and a commitment to excellence, they're here to tantalize your taste buds.
+Our Truck: Our vibrant and welcoming food truck is not just a place to eat; it's a gathering spot for friends and foodies alike. We take pride in our spotlessly clean kitchen on wheels, ensuring your meals are prepared with love and care.
+Join the Let's eat Family: We're more than just a food truck; we're a community. Follow us on social media for the latest updates, special promotions, and behind-the-scenes glimpses of our food truck adventures.
+DESCRIPTION
+  domain_name = module.terrahome_foodtruck_hosting.cloudfront_url
+  town="cooker-cove"
+  content_version=1
+}
+```
+3- Commands run on terraform console
+  - `terraform init` to initialize the terraform cloud
+  - `terraform plan` to create the deployment plan. if any errors occured then to remove those errors.
+  - `terraform apply` to execute the created deployment plan. There is a flag used `auto-approve` to automatically push the changes. 
+4- Once the changes were shown deployed on terratowns, the deployment was complete.
+
+## Deploying more than one page in terratowns
+
+In order to deploy more than one page, a few changes were made.
+
+Earlier there was just one `public` folder related to just one html document. Now if two or more html webpages were being deployed, then the folder structure was rearranged
+
+```sh
+  <public>
+  |
+  |---<FirstWebpageFolder>
+  |      |
+  |      |---<assets>
+  |      |      |
+  |      |      |--------<imagefiles>
+  |      |---index.html
+  |      |---error.html
+  |
+  |---<SecondWebpageFolder>
+  |      |
+  |      |---<assets>
+  |      |      |
+  |      |      |--------<imagefiles>
+  |      |---index.html
+  |      |---error.html
+  |
+  |---<ThirdWebpageFolder> 
+  |
+```
+The module "food-truck" was copied and it was renamed and the description was changed. Also the name of the town was also changed to which it was being deployed to. Then the `variables.tf` and the `main.tf` and the `resource-storage.tf` files were modified. 
+
+Additionally we used another data structure `object` ie nested variables for listing all the values in one place like a map. 
+
+```tf
+variable "foodtruck" {
+  type = object({
+    public_path = string
+    content_version = number
+  })
+}
+```
+
+Then the values were accordingly mapped
+```tf
+foodtruck = {
+  public_path = "/workspace/terraform-beginner-bootcamp-2023/public/FoodTruck"
+  content_version = 2
+  bucket_name = "" 
+}
+```
+
+So the custom provider was the same but the name of the module was changed. 
+Also all the variables were not hard-coded but were assigned values using `var` parameter.
+
+Faced a few errors because of the object changes and the renamings. So had to check and rename all the places where the errors were being shown. 
+
+Commands run on terraform console
+  - `terraform init` to initialize the terraform cloud
+  - `terraform plan` to create the deployment plan. if any errors occured then to remove those errors.
+  - `terraform apply` to execute the created deployment plan. There is a flag used `auto-approve` to automatically push the changes. 
+
+Once everything was correct, the code was deployed and then two pages were simultaneously deployed using terraform.
+
+```tf
+Apply complete! Resources: 25 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+S3_website_endpoint_FoodTruck = "terraform-20231009181827735800000002.s3-website.ap-south-1.amazonaws.com"
+S3_website_endpoint_Movies = "terraform-20231009181827735700000001.s3-website.ap-south-1.amazonaws.com"
+bucket_name = "terraform-20231009181827735800000002"
+cloudfront_url_FoodTruck = "d39vr7c6twbj0s.cloudfront.net"
+cloudfront_url_Movies = "d3cnptglwev7x7.cloudfront.net"
+gitpod /workspace/terraform-beginner-bootcamp-2023 (53-multi-home-terraform-cloud)
+```

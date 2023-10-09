@@ -5,6 +5,8 @@ tasks:
       source ./bin/install_terraform.sh
       source ./bin/create_tfrc_credentials.sh
       source ./bin/set_tf_alias.sh
+      source ./bin/build_provider.sh
+      cp terraform.tfvars.example zzzvariables.auto.tfvars
   - name: sinatra
     before: | 
       cd $PROJECT_ROOT
