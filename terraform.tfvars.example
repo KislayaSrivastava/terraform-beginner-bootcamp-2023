@@ -1,3 +1,4 @@
+bucket_name=""
 terratowns_endpoint="https://terratowns.cloud/api"
 foodtruck = {
   public_path = "/workspace/terraform-beginner-bootcamp-2023/public/FoodTruck"
