@@ -1,4 +1,9 @@
-output "bucket_name" {
+output "bucket_name_Movies" {
+    description = "Bucket Name for our static website"
+    value = module.terrahome_movies_hosting.bucket_name
+}
+
+output "bucket_name_FoodTruck" {
     description = "Bucket Name for our static website"
     value = module.terrahome_foodtruck_hosting.bucket_name
 }

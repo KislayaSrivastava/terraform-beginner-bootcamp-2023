@@ -39,7 +39,7 @@ Join the Let's eat Family: We're more than just a food truck; we're a community.
 DESCRIPTION
   domain_name = module.terrahome_foodtruck_hosting.cloudfront_url
   town="cooker-cove"
-  content_version=1
+  content_version=var.foodtruck.content_version
 }
 
 module "terrahome_movies_hosting" {
